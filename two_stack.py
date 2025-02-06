@@ -31,17 +31,27 @@ def evaluate_expression(expression: str) -> int:
     operators = []
     operands = []
     
-    def push_operator(op: str):
+    def push_operator(op):
         """Push an operator onto the operator stack."""
+        op_map = {'+', '-', '*', '/'}
+        if op in op_map:
+            operators.append(op)
     
-    def push_operand(val: int):
+    def push_operand(val):
         """Push an operand onto the operand stack."""
+        number = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'}
+        if val in number:
+            operands.append(val)
     
     def pop_operator() -> str:
         """Pop and return the top operator from the operator stack."""
+        num = operators.pop(0)
+        return num
     
     def pop_operand() -> int:
         """Pop and return the top operand from the operand stack."""
+        op = operands.pop(0)
+        return op
     
     def apply_operator(op: str, val1: int, val2: int) -> int:
         """
@@ -51,11 +61,38 @@ def evaluate_expression(expression: str) -> int:
         :param val1: int - The first operand.
         :param val2: int - The second operand.
         :return: int - The result of applying the operator.
+        
+        eg: "((3 + 2) * 5)" evaluates to 25
         """
+        if op == '+':
+            return val1 + val2
+        elif op == '-':
+            return val1 - val2
+        elif op == '*':
+            return val1 * val2
+        elif op == '/':
+            return val1 / val2
+                
+                
+
     
     """
     Evaluate the expression one character at a time, the operand stack
     will contain the final result at the end
     """
     
-    return pop_operand()
+    for i in expression:
+        if i == '(':
+            pass
+        elif i == ')':
+            op = pop_operator()
+            val2 = pop_operand()
+            val1 = pop_operand()
+            result = apply_operator(op, val1, val2)
+            push_operand(result)
+        else:
+            push_operator(i)
+            push_operand(i)
+    
+    
+    return operands[0]
